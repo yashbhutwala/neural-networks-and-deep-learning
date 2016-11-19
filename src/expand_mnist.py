@@ -1,14 +1,11 @@
 """expand_mnist.py
 ~~~~~~~~~~~~~~~~~~
-
 Take the 50,000 MNIST training images, and create an expanded set of
 250,000 images, by displacing each training image up, down, left and
 right, by one pixel.  Save the resulting file to
 ../data/mnist_expanded.pkl.gz.
-
 Note that this program is memory intensive, and may not run on small
 systems.
-
 """
 
 from __future__ import print_function
@@ -16,7 +13,7 @@ from __future__ import print_function
 #### Libraries
 
 # Standard library
-import cPickle
+import pickle
 import gzip
 import os.path
 import random
@@ -47,14 +44,14 @@ else:
                 (1,  1, "last",  0),
                 (-1, 1, "last",  27)]:
             new_img = np.roll(image, d, axis)
-            if index_position == "first": 
+            if index_position == "first":
                 new_img[index, :] = np.zeros(28)
-            else: 
+            else:
                 new_img[:, index] = np.zeros(28)
             expanded_training_pairs.append((np.reshape(new_img, 784), y))
     random.shuffle(expanded_training_pairs)
     expanded_training_data = [list(d) for d in zip(*expanded_training_pairs)]
     print("Saving expanded data. This may take a few minutes.")
     f = gzip.open("../data/mnist_expanded.pkl.gz", "w")
-    cPickle.dump((expanded_training_data, validation_data, test_data), f)
+    pickle.dump((expanded_training_data, validation_data, test_data), f)
     f.close()
